@@ -2,6 +2,7 @@ from tkinter import *
 from app import interface as app
 import store
 import login
+import needHelp
 
 
 class reg:
@@ -35,6 +36,10 @@ class reg:
         # result = cursor.fetchall()
         # print(result)
         return True
+
+    def needHelp(self):
+        self.root.destroy()
+        needHelp.Help().window()
 
     def validate(self):
         flag = True
@@ -93,7 +98,7 @@ class reg:
                           bg="light green", command= self.update if flag else None)
         register.place(x=20, y=330)
 
-        report = Button(self.root, text="Need Help/Report", bg="light green")
+        report = Button(self.root, text="Need Help/Report", bg="light green", command=self.needHelp)
         report.place(x=20, y=int(0.90*(app().gheight)))
         self.root.mainloop()
 

@@ -3,6 +3,8 @@ from tkinter import *
 import app
 import login
 from PIL import Image, ImageTk
+import needHelp
+import store
 
 
 class main:
@@ -13,6 +15,14 @@ class main:
         self.root.destroy()
         login.log().window()
         self.database()
+
+    def store(self):
+        self.root.destroy()
+        store.account().window()
+    
+    def needHelp(self):
+        self.root.destroy()
+        needHelp.Help().window()
 
     def window(self):
         w = Label(width=700, height=2,
@@ -38,25 +48,20 @@ class main:
 
         w = Message(self.root, text="Suggestions/Feedback", width="500")
         w.place(x=10, y=490)
-        w = Button(self.root, text="Help?", width=10, bg="light green", height=1)
+        w = Button(self.root, text="Help?", width=10, bg="light green", height=1, command=self.needHelp)
         w.place(x=200, y=490)
         w = Message(self.root, text="CEOs: Suraj , Vasudeva , Anand", width="500")
         w.place(x=10, y=530)
-        w = Button(self.root, text="Contact", width=10, bg="light green", height=1)
+        w = Button(self.root, text="Contact", width=10, bg="light green", height=1, command=self.needHelp)
         w.place(x=200, y=530)
-
-        # w = Button(self.root, text="Books", width=15, height=2, bg="lawn green")
-        # w.place(x=20, y=450)
-        # w = Button(self.root, text="Store", width=15, height=2, bg="lawn green")
-        # w.place(x=100, y=450)
+        
+        w = Message(self.root, text="You can view the store here!", width="500")
+        w.place(x=10, y=570)
+        w = Button(self.root, text="Books", width=10, bg="light green", height=1, command=self.store)
+        w.place(x=200, y=570)
 
         self.root.mainloop()
 
 
 if __name__ == "__main__":
     main().window()
-
-# first things first:
-# 1. fix the size of window to a standard dimensions height: 400 and width 300
-# 2. reduce the size of the self.root window into the standard size and align with the rest of the pages
-# 3. confine to similar kinda of coding practices

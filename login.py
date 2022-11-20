@@ -2,6 +2,7 @@ from tkinter import *
 from app import interface as app
 import store
 import register
+import needHelp 
 
 class log:
     def __init__(self):
@@ -31,10 +32,14 @@ class log:
             self.root.destroy()
             log()
 
+    def needHelp(self):
+        self.root.destroy()
+        needHelp.Help().window()
+
     def database(self):
         dbcon = app().dbcon
         cursor = dbcon.cursor()
-        Squery = "SELECT * FROM CREDENTAILS"# WHERE ID = \'"+ str(self.user) + "\';"
+        Squery = "SELECT * FROM CREDENTAILS WHERE ID = \'"+ str(self.user) + "\';"
         print(Squery)
         cursor.execute(Squery)
         result = cursor.fetchall()[0][-1]
@@ -70,7 +75,7 @@ class log:
         register = Button(self.root, text="Register", bg="light green", command=self.register)
         register.place(x=200, y=148)
 
-        report = Button(self.root, text="Need Help/Report", bg="light green")
+        report = Button(self.root, text="Need Help/Report", bg="light green", command=self.needHelp)
         report.place(x=20, y=int(0.90*(app().gheight)))
         self.root.mainloop()
 

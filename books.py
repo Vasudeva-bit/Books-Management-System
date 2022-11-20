@@ -1,312 +1,115 @@
 from tkinter import *
-import mysql.connector as mysc
-from tkinter import messagebox
-import app
+import pandas as pd
+from app import interface as app
+import main
 
-def viewBooks():
- 
-    global id
+
+class viewBooks():
     def __init__(self):
-        self.root = app().self.root()
+        self.root = app().window()
+        self.window()
+
+    def ad(self):
+        bookNo = int(self.add.get(1.0, "end-1c"))
+        status = 1 + int(self.books_df.loc[self.books_df['Book Number'] == bookNo, 'Book Status'])
+        w = Message(self.root, text=f"The Status of the book is update to {status}\t\t\t\n", width="670")
+        w.place(x=12, y=320)
+        self.books_df['Book Status'] = status
+
+
+    def delet(self):
+        bookNo = int(self.delete.get(1.0, "end-1c"))
+        status = int(self.books_df.loc[self.books_df['Book Number'] == bookNo, 'Book Status']) - 1
+        if(status < 0): status = 0
+        w = Message(self.root, text=f"The Status of the book is update to {status}\t\t\t\n", width="670")
+        w.place(x=12, y=320)
+        self.books_df['Book Status'] = status
+
+    def view(self):
+        bookNo = int(self.delete.get(1.0, "end-1c"))
+        name = str(self.books_df.loc[self.books_df['Book Number'] == bookNo, 'Book Name'].iloc[0])
+        desc = str(self.books_df.loc[self.books_df['Book Number'] == bookNo, 'Book Description'].iloc[0])
+        field = str(self.books_df.loc[self.books_df['Book Number'] == bookNo, 'Field'].iloc[0])
+        w = Message(self.root, text=f"The Title is {name}. It belongs to {field}\n{desc}", width="670")
+        w.place(x=12, y=320)
+
+    def issue(self):
+        bookNo = int(self.issu.get(1.0, "end-1c"))
+        status = int(self.books_df.loc[self.books_df['Book Number'] == bookNo, 'Book Status']) - 1
+        if(status < 0): status = 0
+        w = Message(self.root, text=f"The Status of the book is update to {status}\t\t\t\n", width="670")
+        w.place(x=12, y=320)
+        self.books_df['Book Status'] = status
+
+    def retun(self):
+        pass
+        bookNo = int(self.ret.get(1.0, "end-1c"))
+        status = 1 + int(self.books_df.loc[self.books_df['Book Number'] == bookNo, 'Book Status'])
+        w = Message(self.root, text=f"The Status of the book is update to {status}\t\t\t\n", width="670")
+        w.place(x=12, y=320)
+        self.books_df['Book Status'] = status
+
+    def home(self):
+        self.root.destroy()
+        main.main().window()
 
     def window(self):
-        Label(self.root,width="300",height="2", text="View Books", bg="green yellow",fg="black").pack()
-    
-        db = mysc.connect(host ="localhost",user = "root",password = 'root',database='bms')
-        cursor = db.cursor()
-    
-        Squery= "select * from books;"
-        print(Squery)
-    
-        try:
-            cursor.execute(Squery)
-            # db.commit()
-            L = Label(self.root, text = "%-10s%-20s%-20s%-20s"%('BID','Title','Author','Available'))
-            L.place(x=220,y=60)
-    
-            L = Label(self.root, text = "----------------------------------------------------------------")
-            L.place(x=185,y=75)
-    
-            x=4
-            for i in cursor:
-                L = Label(self.root, text = "%-10s%-20s%-20s%-20s"%(i[0],i[1],i[2],i[3]))
-                L.place(x=220,y=100)
-                x+=1   
-    
-        except:
-            messagebox.showinfo("Error","Cannot Fetch data.")
-        
-        print("view")
+        self.books_df = pd.read_csv('Books Data.csv')
+        w = Label(self.root, text="Welcome to Book Transactions",
+                  bg='skyblue', justify='center')
+        w.pack(fill=X)
+
+        w = Message(self.root, text="Welcome to book transactions window, dedicated only for books related operations such as add, return, issue, delete, view etc. Feel free to check out various options facilitated by our software. Any changes to the books store need to done in this window only. All the changes are reflected in the database timely.", width="670")
+        w.place(x=12, y=30)
+
+        w = Label(self.root, text="Enter the Book No to add to store")
+        w.place(x=15, y=120)
+        self.add = Text(self.root, height=1, width=22)
+        self.add.place(x=250, y=120)
+        add = Button(self.root, text="Add",
+                     bg="light green", command=self.ad, width=20)
+        add.place(x=450, y=119)
+
+        w = Label(self.root, text="Enter the Book No to delete from store")
+        w.place(x=15, y=160)
+        self.delete = Text(self.root, height=1, width=22)
+        self.delete.place(x=250, y=160)
+        delet = Button(self.root, text="Delete",
+                     bg="light green", command=self.delet, width=20)
+        delet.place(x=450, y=159)
+
+        w = Label(self.root, text="Enter the Book No to return to store")
+        w.place(x=15, y=200)
+        self.ret = Text(self.root, height=1, width=22)
+        self.ret.place(x=250, y=200)
+        ret = Button(self.root, text="Return",
+                     bg="light green", command=self.retun, width=20)
+        ret.place(x=450, y=199)
+
+        w = Label(self.root, text="Enter the Book No to issue to user")
+        w.place(x=15, y=240)
+        self.issu = Text(self.root, height=1, width=22)
+        self.issu.place(x=250, y=240)
+        issu = Button(self.root, text="Issue",
+                     bg="light green", command=self.issue, width=20)
+        issu.place(x=450, y=239)
+
+        w = Label(self.root, text="Enter the Book No to view details")
+        w.place(x=15, y=240)
+        self.vie = Text(self.root, height=1, width=22)
+        self.vie.place(x=250, y=240)
+        vie = Button(self.root, text="View",
+                     bg="light green", command=self.view, width=20)
+        vie.place(x=450, y=239)
+
+        w = Message(self.root, text="Thanks for exploring various operations, go to home here!", width="670")
+        w.place(x=10, y=265)
+
+        home = Button(self.root, text="Home", bg="light green", command=self.home)
+        home.place(x=15, y=290)
+
+        self.root.mainloop()
 
 
-    def add_db(self):
-    
-        global id
-        global title
-        global author
-    
-        bid=id.get()
-        btitle=title.get()
-        bauthor=author.get()
-        
-        db = mysc.connect(host ="localhost",user = "root",password = 'Root',database='bms')
-        cursor = db.cursor()
-        
-        print(bid,end='--')
-        print(btitle,end='--')
-        print(bauthor,end='--')
-        print("add")
-    
-        sqlquery= "insert into books values('" + bid +"','"+btitle+"','"+bauthor+"','YES');"
-        print(sqlquery)
-    
-        try:
-            cursor.execute(sqlquery)
-            db.commit()
-            messagebox.showinfo('Success',"Book added Successfully")
-        except:
-            messagebox.showinfo("Error","Cannot add given book data into Database")
-        
-        self.root.destroy()
-    
-    def addBooks(self):
-    
-        global id
-        global title
-        global author
-    
-        self.root=Tk()
-        self.root.title('Add Books')
-        self.root.geometry('500x400+500+100')
-    
-        Label(self.root,width="300",height="2", text="Add Books", bg="green yellow",fg="black").pack()
-    
-        #----------id-------------------
-    
-        L = Label(self.root, text = "Enter Book id: ")
-        L.place(x=120,y=60)
-    
-        L = Label(self.root, text = "   ")
-        L.place(x=210,y=60)
-    
-        id=Entry(self.root,width=15)
-        id.place(x=210,y=60)
-    
-        #----------title-------------------
-    
-        L = Label(self.root, text = "Enter Title: ")
-        L.place(x=120,y=100)
-    
-        L = Label(self.root, text = "   ")
-        L.place(x=210,y=100)
-    
-        title=Entry(self.root,width=15)
-        title.place(x=210,y=100)
-    
-        #----------author-------------------
-    
-        L = Label(self.root, text = "Enter Author: ")
-        L.place(x=120,y=140)
-    
-        L = Label(self.root, text = "   ")
-        L.place(x=210,y=140)
-    
-        author=Entry(self.root,width=15)
-        author.place(x=210,y=140)
-        
-        submitbtn=Button(self.root,text="Submit",command=add_db,bg="lawn green",font = ('arial', 15, 'bold'))
-        submitbtn.place(x=200,y=200)
-            
-        print("add")
-
-    
-    def delete_db(self):
-    
-        global id
-    
-        bid=id.get()
-        
-        db = mysc.connect(host ="localhost",user = "root",password = 'Root',database='bms')
-        cursor = db.cursor()
-        
-        print(bid,end='--')
-        print("delete")
-    
-        sqlquery= "delete from books where bid='"+bid+"';"
-        print(sqlquery)
-    
-        try:
-            cursor.execute(sqlquery)
-            db.commit()
-            messagebox.showinfo('Success',"Book deleted Successfully")
-        except:
-            messagebox.showinfo("Error","Book with given id does not exist")
-        
-        self.root.destroy()
-    
-    def deleteBooks(self):
-    
-        global id
-    
-        self.root=Tk()
-        self.root.title('Delete Books')
-        self.root.geometry('500x300+500+100')
-    
-        Label(self.root,width="300",height="2", text="Delete Books", bg="green yellow",fg="black").pack()
-        
-        L = Label(self.root, text = "Enter Book id: ")
-        L.place(x=130,y=80)
-    
-        L = Label(self.root, text = "   ")
-        L.place(x=220,y=80)
-    
-        id=Entry(self.root,width=20)
-        id.place(x=220,y=80)
-    
-        submitbtn=Button(self.root,text="Submit",command=delete_db,bg="lawn green",font = ('arial', 15, 'bold'))
-        submitbtn.place(x=200,y=130)
-            
-        print("delete")
-        pass
-
-    def issue_db():
-    
-        global id
-        global StudentName
-    
-        bid=id.get()
-        bStudentName=StudentName.get()
-    
-        db = mysc.connect(host ="localhost",user = "root",password = 'Root',database='bms')
-        cursor = db.cursor()
-        
-        print(bid,end='--')
-        print(bStudentName,end='--')
-        print("issue")
-    
-        try:
-            checkavailability=" select * from books where available='YES';"
-            print(checkavailability)
-            cursor.execute(checkavailability)
-    
-            flag=0
-    
-            for i in cursor:
-                print(i[0])
-                if(i[0]==bid):
-                    flag=1
-                    break;
-            
-            if flag==1:     
-                updatequery="update books set available='NO' where bid='"+bid +"';"
-                print(updatequery)
-                cursor.execute(updatequery)
-                db.commit()
-    
-                sqlquery= "insert into issue values('" + bid +"','" +bStudentName+"' );"
-                print(sqlquery)
-    
-                cursor.execute(sqlquery)
-                db.commit()
-    
-                messagebox.showinfo('Success',"Book issued Successfully")
-            else:
-                messagebox.showinfo("Error","Required Book is not available")
-        except:
-            messagebox.showinfo("Error","Cannot issue given book ")
-        
-    def issueBooks(self):
-    
-        global id
-        global StudentName
-    
-        self.root=Tk()
-        self.root.title('Issue Books')
-        self.root.geometry('500x300+500+100')
-    
-        Label(self.root,width="300",height="2", text="Issue Books", bg="green yellow",fg="black").pack()
-        
-        L = Label(self.root, text = "Enter Book id: ")
-        L.place(x=140,y=70)
-    
-        L = Label(self.root, text = "   ")
-        L.place(x=260,y=70)
-    
-        id=Entry(self.root,width=15)
-        id.place(x=260,y=70)
-        
-        L = Label(self.root,text = "Enter StudentName: ")
-        L.place(x=140,y=110)
-    
-        L = Label(self.root, text = "   ")
-        L.place(x=260,y=110)
-    
-        StudentName=Entry(self.root,width=15)
-        StudentName.place(x=260,y=110)
-        
-        submitbtn=Button(self.root,text="Submit",command=issue_db,bg="lawn green",font = ('arial', 15, 'bold'))
-        submitbtn.place(x=220,y=180)
-            
-        print("issue")
-
-    def return_db():
-        bid=id.get()
-    
-        db = mysc.connect(host ="localhost",user = "root",password = 'Root',database='bms')
-        cursor = db.cursor()
-        
-        print(bid,end='--')
-        print("return")
-    
-        try:
-            checkavailability=" select * from books where available='NO';"
-            print(checkavailability)
-            cursor.execute(checkavailability)
-    
-            flag=0
-    
-            for i in cursor:
-                print(i[0])
-                if(i[0]==bid):
-                    flag=1
-                    break
-            
-            if flag==1:     
-                updatequery="update books set available='YES' where bid='"+bid +"';"
-                print(updatequery)
-                cursor.execute(updatequery)
-                db.commit()
-    
-                sqlquery= "delete from issue where bid='" + bid +"';"
-                print(sqlquery)
-    
-                cursor.execute(sqlquery)
-                db.commit()
-    
-                messagebox.showinfo('Success',"Book returned Successfully")
-            else:
-                messagebox.showinfo("Error","Invalid Book id")
-        except:
-            messagebox.showinfo("Error","Cannot return given book ")
-        
-    def returnBooks(self):
-        self.root=Tk()
-        self.root.title('Return Books')
-        self.root.geometry('500x300+500+100')
-    
-        Label(self.root,width="300",height="2", text="Return Books", bg="green yellow",fg="black").pack()
-    
-        L = Label(self.root, text = "Enter Book id: ")
-        L.place(x=130,y=80)
-    
-        L = Label(self.root, text = "   ")
-        L.place(x=220,y=80)
-    
-        id=Entry(self.root,width=20)
-        id.place(x=220,y=80)
-    
-        
-        submitbtn=Button(self.root,text="Submit",command=return_db,bg="lawn green",font = ('arial', 15, 'bold'))
-        submitbtn.place(x=200,y=130)
-            
-        print("return")
+if __name__ == "__main__":
+    ob = viewBooks()
